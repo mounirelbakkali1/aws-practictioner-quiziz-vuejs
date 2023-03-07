@@ -17,6 +17,7 @@
       <div v-for="(step, index) in steps" :key="index" v-show="index === currentStep">
         <h2>{{ step }}</h2>
         <div v-show="index === 1">
+          <p>{{ counter }} seconds</p>
           <progress :max="totalQuestions" :value="currentQuestionIndex + 1"></progress>
           <span>{{ currentQuestionIndex + 1 }} / {{ totalQuestions }}</span>
           <div>
@@ -50,9 +51,12 @@
       </div>
     </div>
     <div class="my-step-buttons">
-      <button v-if="currentStep > 0" @click="currentStep--" class="my-step-button">Back</button>
-
-      <button @click="moveToNext" :disabled="currentStep === steps.length" class="my-step-button">
+      <!-- <button v-if="currentStep > 0" @click="currentStep--" class="my-step-button">Back</button> -->
+      <button
+        @click="moveToNext"
+        :disabled="currentStep === steps.length || this.currentStep === 1"
+        class="my-step-button"
+      >
         Next
       </button>
     </div>
@@ -61,18 +65,39 @@
 
 <script>
 export default {
+  watch: {
+    currentStep(val) {
+      if (val === 1) {
+        this.counterInterval = setInterval(() => {
+          this.counter--
+        }, 1000)
+        this.interval = setInterval(() => {
+          if (this.currentQuestionIndex === this.questions.length - 1) {
+            this.moveToNext()
+            clearInterval(this.interval)
+          }
+          this.nextQuestion()
+        }, 10000)
+      } else {
+        clearInterval(this.interval)
+        clearInterval(this.counterInterval)
+      }
+    }
+  },
   props: {
     questions: {
       type: Array,
       required: true
     }
   },
+
   methods: {
     moveToNext() {
       if (this.currentStep < this.steps.length - 1) {
         this.currentStep++
       } else {
         alert('all done!')
+        clearInterval(this.counterInterval)
       }
     },
     // when click div with class option check the input radio
@@ -90,11 +115,12 @@ export default {
     nextQuestion() {
       // if the current question is the last question then show the score
       if (this.currentQuestionIndex === this.questions.length - 1) {
-        this.currentStep = 2
+        this.moveToNext()
         return
       }
       this.currentQuestionIndex++
       this.selectedOption = null
+      this.counter = 10
     }
   },
   data() {
@@ -102,6 +128,9 @@ export default {
       currentQuestionIndex: 0,
       selectedOption: null,
       currentStep: 0,
+      interval: null,
+      counterInterval: null,
+      counter: 10,
       steps: ['info', 'quiz', 'score']
     }
   },
