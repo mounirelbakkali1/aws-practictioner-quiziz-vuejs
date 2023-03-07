@@ -7,7 +7,7 @@
         alt=""
         loading="lazy"
       />
-      <h5 class="fw-bold">Practitioner <span class="text-warning">Quiziz</span></h5>
+      <h5 class="fw-bold">{{ customTitle }}<span class="text-warning">Quiziz</span></h5>
     </MDBNavbarBrand>
     <MDBNavbarToggler
       @click="collapse1 = !collapse1"
@@ -48,6 +48,12 @@ export default {
     const collapse1 = ref(false)
     return {
       collapse1
+    }
+  },
+  props: {
+    customTitle: {
+      type: String,
+      required: true
     }
   }
 }

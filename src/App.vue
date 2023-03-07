@@ -1,15 +1,20 @@
 <script setup>
 import NavBar from './components/NavBar.vue'
-import Steper from './components/SteperComponent.vue'
+import Main from './components/MainComponent.vue'
+let customTitle = ' Cloud Practitioner '
 </script>
 
 <template>
   <header>
-    <NavBar />
+    <NavBar :customTitle="customTitle" />
   </header>
   <main>
-    <Steper />
+    <Main />
   </main>
+
+  <!-- <footer>
+    <ParentTest />
+  </footer> -->
 </template>
 
 <style scoped>
