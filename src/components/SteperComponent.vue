@@ -1,3 +1,185 @@
+<script>
+import Question from './QuestionComponent.vue'
+export default {
+  components: {
+    Question
+  },
+  props: {
+    questions: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      steps: ['info', 'quiz', 'score'],
+      currentQuestionIndex: 0,
+      selectedOption: null,
+      selectedOptions: new Set(),
+      currentStep: 0,
+      interval: null,
+      counterInterval: null,
+      counter: 10,
+      score: 0,
+      template: '',
+      i: 0
+    }
+  },
+
+  computed: {
+    currentQuestion() {
+      return this.questions[this.currentQuestionIndex]
+    },
+    totalQuestions() {
+      return this.questions.length
+    }
+  },
+  watch: {
+    currentStep(val) {
+      switch (val) {
+        case 0:
+          this.currentQuestionIndex = 0
+          this.selectedOptions.clear()
+          break
+        case 1:
+          this.counterInterval = setInterval(() => {
+            this.counter--
+          }, 1000)
+          this.interval = setInterval(() => {
+            if (this.currentQuestionIndex === this.questions.length - 1) {
+              this.moveToNext()
+              clearInterval(this.interval)
+            }
+            this.nextQuestion()
+          }, 10000)
+          break
+        case 2:
+          clearInterval(this.interval)
+          clearInterval(this.counterInterval)
+          this.calculateScore()
+          // for each question create a template to show the correct answer with green color and the selected answer with red color if the selected answer is wrong
+
+          this.template = ''
+          this.i = 0
+          this.questions.forEach((question, index) => {
+            let options = ''
+            let _class = ''
+            //let test = false;
+            question.options.forEach((option) => {
+              const selectedAnswer = Array.from(this.selectedOptions).find(
+                (option) => option[0] == index
+              )
+              if (
+                selectedAnswer[1] == question.answers.correct &&
+                question.answers.correct == option.id
+              ) {
+                _class = 'correct'
+              } else if (
+                selectedAnswer[1] != question.answers.correct &&
+                selectedAnswer[1] == option.id
+              )
+                _class = 'wrong'
+              else _class = ''
+              options += `<div class="option ${_class}"><div style="display:flex"><span>${option.id}</span>${option.content}</div></div>`
+            })
+
+            this.template += `
+        <div>
+        <p>Question ${question.id}/10}</p>
+        <h3 style="padding:30px 0px">${question.question}</h3>
+          ${options}
+          <p class='score_question_comment'><img src='../assets/img/icons8-ok-48.png'>${question.answers.comment}</p>
+        </div>`
+            this.i++
+          })
+
+          // this.questions.forEach((question, index) => {
+          //   const selectedAnswer = Array.from(this.selectedOptions).find(
+          //     (option) => option[0] == index
+          //   )
+
+          //   this.template += `
+          //     <div class="question-container">
+          //       <h6>${question.question}</h6>
+          //       <div class="option ${
+          //         selectedAnswer && selectedAnswer[1] == question.answers.correct
+          //           ? 'correct'
+          //           : 'wrong'
+          //       }">
+          //         <input type="radio" id="question_${index}_answer_${
+          //     question.answers.correct - 1
+          //   }" name="question_answer_${index}" checked />
+          //               <label for="question_${index}_answer_${question.answers.correct - 1}">${
+          //     question.options[question.answers.correct - 1].content
+          //   }</label>
+          //       </div>
+          //       ${
+          //         selectedAnswer && selectedAnswer[1] != question.answers.correct
+          //           ? `
+          //         <div class="option wrong">
+          //           <input type="radio" id="question_${index}_answer_${
+          //               selectedAnswer[1] - 1
+          //             }" name="question_answer_${index}" checked />
+          //           <label for="question_${index}_answer_${selectedAnswer[1] - 1}">${
+          //               question.options[selectedAnswer[1] - 1].content
+          //             }</label>
+          //         </div>
+          //       `
+          //           : ''
+          //       }
+          //     </div>
+          //   `
+          // })
+
+          break
+      }
+    },
+    selectedOption(val) {
+      if (val != null) this.selectedOptions.add(val)
+    },
+    currentQuestionIndex(val) {
+      if (val === this.questions.length - 1) {
+        console.table(Array.from(this.selectedOptions))
+        this.moveToNext()
+        return
+      }
+    }
+  },
+
+  methods: {
+    moveToNext() {
+      if (this.currentStep < this.steps.length - 1) {
+        this.currentStep++
+      } else {
+        clearInterval(this.counterIntervals)
+      }
+    },
+
+    nextQuestion() {
+      document.querySelectorAll('.option').forEach((option) => {
+        option.classList.remove('active')
+      })
+      // if the current question is the last question then show the score
+      this.currentQuestionIndex++
+      this.selectedOption = null
+      this.counter = 10
+    },
+    calculateScore() {
+      const correctAnswers = this.questions.map((question) => question.answers.correct)
+      // compare the correct answers with the selected answers and calculate the score
+      this.score = correctAnswers.reduce((acc, curr, index) => {
+        const selectedAnswer = Array.from(this.selectedOptions).find((option) => option[0] == index)
+        if (selectedAnswer && selectedAnswer[1] === curr) {
+          return acc + 1
+        }
+        return acc
+      }, 0)
+      console.log('correctAnswers', correctAnswers)
+      this.$emit('score', this.score)
+    }
+  }
+}
+</script>
 <template>
   <div class="my-stepper">
     <div class="my-step-header">
@@ -20,24 +202,11 @@
           <p>{{ counter }} seconds</p>
           <progress :max="totalQuestions" :value="currentQuestionIndex + 1"></progress>
           <span>{{ currentQuestionIndex + 1 }} / {{ totalQuestions }}</span>
-          <div>
-            <h3>{{ currentQuestion.question }}</h3>
-            <div class="question-container">
-              <div
-                v-for="(answer, key) in currentQuestion.answers"
-                :key="`question_${index}_answer_${key}`"
-                class="option"
-                @click="checkAnswer"
-              >
-                <input
-                  type="radio"
-                  :id="`question_${index}_answer_${key}`"
-                  :name="`question_answer_${index}`"
-                />
-                <label :for="`question_${index}_answer_${key}`">{{ answer.text }}</label>
-              </div>
-            </div>
-          </div>
+          <Question
+            :currentQuestion="currentQuestion"
+            :index="currentQuestionIndex"
+            @selectedOption="selectedOption = $event"
+          />
           <div>
             <button
               @click="nextQuestion"
@@ -48,13 +217,19 @@
             </button>
           </div>
         </div>
+        <div v-show="index === 2">
+          <div v-html="template"></div>
+          <div>
+            <h3>Your score is {{ score }} / {{ totalQuestions }}</h3>
+          </div>
+        </div>
       </div>
     </div>
     <div class="my-step-buttons">
       <!-- <button v-if="currentStep > 0" @click="currentStep--" class="my-step-button">Back</button> -->
       <button
         @click="moveToNext"
-        :disabled="currentStep === steps.length || this.currentStep === 1"
+        :disabled="currentStep === steps.length - 1 || currentStep === 1"
         class="my-step-button"
       >
         Next
@@ -62,90 +237,13 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  watch: {
-    currentStep(val) {
-      if (val === 1) {
-        this.counterInterval = setInterval(() => {
-          this.counter--
-        }, 1000)
-        this.interval = setInterval(() => {
-          if (this.currentQuestionIndex === this.questions.length - 1) {
-            this.moveToNext()
-            clearInterval(this.interval)
-          }
-          this.nextQuestion()
-        }, 10000)
-      } else {
-        clearInterval(this.interval)
-        clearInterval(this.counterInterval)
-      }
-    }
-  },
-  props: {
-    questions: {
-      type: Array,
-      required: true
-    }
-  },
-
-  methods: {
-    moveToNext() {
-      if (this.currentStep < this.steps.length - 1) {
-        this.currentStep++
-      } else {
-        alert('all done!')
-        clearInterval(this.counterInterval)
-      }
-    },
-    // when click div with class option check the input radio
-    checkAnswer(event) {
-      const input = event.target.querySelector('input')
-      input.checked = true
-      // foreach option add class active and remove class active from other options
-      const options = event.target.parentElement.querySelectorAll('.option')
-      options.forEach((option) => {
-        option.classList.remove('active')
-      })
-      event.target.classList.add('active')
-      this.selectedOption = input.id
-    },
-    nextQuestion() {
-      // if the current question is the last question then show the score
-      if (this.currentQuestionIndex === this.questions.length - 1) {
-        this.moveToNext()
-        return
-      }
-      this.currentQuestionIndex++
-      this.selectedOption = null
-      this.counter = 10
-    }
-  },
-  data() {
-    return {
-      currentQuestionIndex: 0,
-      selectedOption: null,
-      currentStep: 0,
-      interval: null,
-      counterInterval: null,
-      counter: 10,
-      steps: ['info', 'quiz', 'score']
-    }
-  },
-  computed: {
-    currentQuestion() {
-      return this.questions[this.currentQuestionIndex]
-    },
-    totalQuestions() {
-      return this.questions.length
-    }
-  }
+<style>
+.wrong {
+  border: 3px solid red !important;
 }
-</script>
-
-<style scoped>
+.correct {
+  border: 3px solid green !important;
+}
 .my-stepper {
   display: flex;
   flex-direction: column;

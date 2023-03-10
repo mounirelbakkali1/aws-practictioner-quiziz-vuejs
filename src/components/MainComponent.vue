@@ -8,59 +8,288 @@ export default {
         {
           id: 1,
           question:
-            'What is the name of the AWS service that allows you to create a virtual private network?',
-          answers: [
-            { id: 1, text: 'AWS VPN', correct: false },
-            { id: 2, text: 'AWS VPC', correct: true },
-            { id: 3, text: 'AWS VPN Gateway', correct: false },
-            { id: 4, text: 'AWS VPC Gateway', correct: false }
-          ]
+            'Why is AWS more economical than traditional data centers for applications with varying compute workloads?',
+          options: [
+            {
+              id: 1,
+              content: 'Amazon EC2 costs are billed on a monthly basis'
+            },
+            {
+              id: 2,
+              content: 'Users retain full administrative access to their Amazon EC2 instances'
+            },
+            {
+              id: 3,
+              content: 'Amazon EC2 instances can be launched on demand when needed.'
+            },
+            {
+              id: 4,
+              content: 'Users can permanently run enough instances to handle peak workloads'
+            }
+          ],
+          answers: {
+            correct: 3,
+            comment:
+              'The ability to launch instances on demand when needed allows users to launch and terminate instances in response to a varying workload. This is a more economical practice than purchasing enough on-premises servers to handle the peak load.'
+          }
         },
         {
           id: 2,
-          question:
-            'What is the name of the AWS service that allows you to create a virtual private network?',
-          answers: [
-            { id: 1, text: 'AWS VPN', correct: false },
-            { id: 2, text: 'AWS VPC', correct: true },
-            { id: 3, text: 'AWS VPN Gateway', correct: false },
-            { id: 4, text: 'AWS VPC Gateway', correct: false }
-          ]
+          question: 'Which AWS service would simplify the migration of a database to AWS ?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Storage Gateway'
+            },
+            {
+              id: 2,
+              content: 'AWS Database Migration Service (AWS DMS)'
+            },
+            {
+              id: 3,
+              content: 'Amazon EC2.'
+            },
+            {
+              id: 4,
+              content: 'Amazon AppStream 2.0'
+            }
+          ],
+          answers: {
+            correct: 2,
+            comment:
+              'AWS DMS helps users migrate databases to AWS quickly and securely. The source database remains fully operational during the migration, minimizing downtime to applications that rely on the database. AWS DMS can migrate data to and from most widely used commercial and open-source databases'
+          }
         },
         {
           id: 3,
           question:
-            'What is the name of the AWS service that allows you to create a virtual private network?',
-          answers: [
-            { id: 1, text: 'AWS VPN', correct: false },
-            { id: 2, text: 'AWS VPC', correct: true },
-            { id: 3, text: 'AWS VPN Gateway', correct: false },
-            { id: 4, text: 'AWS VPC Gateway', correct: false }
-          ]
+            'Which AWS offering enables users to find, buy, and immediately start using software solutions in theirAWS environment?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Config'
+            },
+            {
+              id: 2,
+              content: 'AWS OpsWorks'
+            },
+            {
+              id: 3,
+              content: 'AWS SDK'
+            },
+            {
+              id: 4,
+              content: 'AWS Marketplace'
+            }
+          ],
+          answers: {
+            correct: 4,
+            comment:
+              'AWS Marketplace is a digital catalog with thousands of software listings from independent software vendors that makes it easy to find, test, buy, and deploy software that runs on AWS to applications that rely on the database. AWS DMS can migrate data to and from most widely used commercial and open-source databases'
+          }
         },
         {
           id: 4,
           question:
-            'What is the name of the AWS service that allows you to create a virtual private network?',
-          answers: [
-            { id: 1, text: 'AWS VPN', correct: false },
-            { id: 2, text: 'AWS VPC', correct: true },
-            { id: 3, text: 'AWS VPN Gateway', correct: false },
-            { id: 4, text: 'AWS VPC Gateway', correct: false }
-          ]
+            'Which AWS networking service enables a company to create a virtual network within AWS?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Config'
+            },
+            {
+              id: 2,
+              content: 'Amazon Route 53'
+            },
+            {
+              id: 3,
+              content: 'AWS Direct Connect'
+            },
+            {
+              id: 4,
+              content: 'Amazon Virtual Private Cloud (Amazon VPC)'
+            }
+          ],
+          answers: {
+            correct: 4,
+            comment:
+              'Amazon VPC lets users provision a logically isolated section of the AWS Cloud where users can launch AWS resources in a virtual network that they define.'
+          }
         },
         {
           id: 5,
           question:
-            'What is the name of the AWS service that allows you to create a virtual private network?',
-          answers: [
-            { id: 1, text: 'AWS VPN', correct: false },
-            { id: 2, text: 'AWS VPC', correct: true },
-            { id: 3, text: 'AWS VPN Gateway', correct: false },
-            { id: 4, text: 'AWS VPC Gateway', correct: false }
-          ]
+            'Which of the following is an AWS responsibility under the AWS shared responsibility model?',
+          options: [
+            {
+              id: 1,
+              content: 'Configuring third-party applications'
+            },
+            {
+              id: 2,
+              content: 'Maintaining physical hardware '
+            },
+            {
+              id: 3,
+              content: 'Securing application access and data'
+            },
+            {
+              id: 4,
+              content: 'Managing guest operating systems'
+            }
+          ],
+          answers: {
+            correct: 2,
+            comment:
+              'Maintaining physical hardware is an AWS responsibility under the AWS shared responsibility model.'
+          }
+        },
+        {
+          id: 6,
+          question:
+            'Which component of the AWS global infrastructure does Amazon CloudFront use to ensure low-latency delivery?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Regions'
+            },
+            {
+              id: 2,
+              content: 'Edge locations'
+            },
+            {
+              id: 3,
+              content: 'Availability Zones'
+            },
+            {
+              id: 4,
+              content: 'Virtual Private Cloud (VPC)'
+            }
+          ],
+          answers: {
+            correct: 2,
+            comment:
+              'To deliver content to users with lower latency, Amazon CloudFront uses a global network of points of presence (edge locations and regional edge caches) worldwide. '
+          }
+        },
+        {
+          id: 7,
+          question:
+            "How would a system administrator add an additional layer of login security to a user's AWS Management Console?",
+          options: [
+            {
+              id: 1,
+              content: 'Use Amazon Cloud Directory'
+            },
+            {
+              id: 2,
+              content: 'Audit AWS Identity and Access Management (IAM) roles'
+            },
+            {
+              id: 3,
+              content: 'Enable multi-factor authentication'
+            },
+            {
+              id: 4,
+              content: 'Enable AWS CloudTrail'
+            }
+          ],
+          answers: {
+            correct: 3,
+            comment:
+              'Multi-factor authentication (MFA) is a simple best practice that adds an extra layer of protection on top of a username and password. With MFA enabled, when a user signs in to an AWS Management Console, they will be prompted for their username and password (the first factor—what they know), as well as for an authentication code from their MFA device (the second factor—what they have). Taken together, these multiple factors provide increased security for AWS account settings and resources.'
+          }
+        },
+        {
+          id: 8,
+          question:
+            'Which service can identify the user that made the API call when an Amazon EC2 instance is terminated?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Trusted Advisor'
+            },
+            {
+              id: 2,
+              content: 'AWS CloudTrail'
+            },
+            {
+              id: 3,
+              content: 'AWS X-Ray'
+            },
+            {
+              id: 4,
+              content: 'AWS Identity and Access Management (AWS IAM)'
+            }
+          ],
+          answers: {
+            correct: 2,
+            comment:
+              'AWS CloudTrail helps users enable governance, compliance, and operational and risk auditing of their AWS accounts. Actions taken by a user, role, or an AWS service are recorded as events in CloudTrail. Events include actions taken in the AWS Management Console, AWS Command Line Interface (CLI), and AWS SDKs and APIs.'
+          }
+        },
+        {
+          id: 9,
+          question: 'Which service would be used to send alerts based on Amazon CloudWatch alarms?',
+          options: [
+            {
+              id: 1,
+              content: 'Amazon Simple Notification Service (Amazon SNS)'
+            },
+            {
+              id: 2,
+              content: 'AWS CloudTrail'
+            },
+            {
+              id: 3,
+              content: 'AWS Trusted Advisor'
+            },
+            {
+              id: 4,
+              content: 'Amazon Route 53'
+            }
+          ],
+          answers: {
+            correct: 4,
+            comment:
+              'Amazon SNS and Amazon CloudWatch are integrated so users can collect, view, and analyze metrics for every active SNS. Once users have configured CloudWatch for Amazon SNS, they can gain better insight into the performance of their Amazon SNS topics, push notifications, and SMS deliveries'
+          }
+        },
+        {
+          id: 10,
+          question:
+            ' Where can a user find information about prohibited actions on the AWS infrastructure?',
+          options: [
+            {
+              id: 1,
+              content: 'AWS Trusted Advisor'
+            },
+            {
+              id: 2,
+              content: 'AWS Identity and Access Management (IAM)'
+            },
+            {
+              id: 3,
+              content: 'AWS Billing Console'
+            },
+            {
+              id: 4,
+              content: 'AWS Acceptable Use Policy'
+            }
+          ],
+          answers: {
+            correct: 4,
+            comment:
+              'The AWS Acceptable Use Policy provides information regarding prohibited actions on the AWS infrastructure. '
+          }
         }
-      ]
+      ],
+      score: 0
+    }
+  },
+  watch: {
+    score: function (val) {
+      console.log('score is : ' + val)
     }
   }
 }
@@ -68,6 +297,6 @@ export default {
 
 <template>
   <div>
-    <Steper :questions="questions" />
+    <Steper :questions="questions" @score="score = $event" />
   </div>
 </template>
